@@ -8,13 +8,13 @@
     <singleton-p>t</singleton-p>
     <auto-mount>intranet-riskmanagement</auto-mount>
 
-    <version name="2.0" url="http://openacs.org/repository/download/apm/intranet-riskmanagement-2.0.apm">
+    <version name="2.1.3" url="http://openacs.org/repository/download/apm/intranet-riskmanagement-2.1.3.apm">
         <owner url="mailto:fraber@fraber.de">Frank Bergmann</owner>
         <owner url="mailto:mai-bee@gmx.net">Alwin Egger</owner>
         <vendor url="http://www.project-open.com/">Project/Open</vendor>
 
-        <provides url="intranet-timesheet" version="1.0"/>
-        <requires url="intranet-core" version="1.0"/>
+        <provides url="intranet-timesheet" version="2.1.3"/>
+        <requires url="intranet-core" version="2.1.0"/>
 
         <callbacks>
         </callbacks>
