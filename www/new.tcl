@@ -352,6 +352,10 @@ ad_form -extend -name riskmanagement_risk -on_request {
 	{ [string length $risk_name] < 1000 }
 	"[lang::message::lookup {} intranet-riskmanagement.Risk_name_too_long {Risk Name too long (max 1000 characters).}]" 
     }
+    {risk_name
+        {![db_string risk_count "select count(*) from im_risks where risk_name = :risk_name and risk_project_id = :risk_project_id and risk_id != :risk_id"]}
+        "[lang::message::lookup {} intranet-risks.Risk_name_already_exists_for_this_project {Risk 'name' already exists for this project}]"
+    }
 }
 
 # ---------------------------------------------------------------
