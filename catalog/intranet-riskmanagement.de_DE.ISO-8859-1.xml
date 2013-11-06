@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="intranet-riskmanagement" locale="de_DE" charset="ISO-8859-1">
+
+  <msg key="Delete_Risks">Risiko löschen</msg>
+  <msg key="Impact">Auswirkung</msg>
+  <msg key="Name">Risikoname</msg>
+  <msg key="New_Risk">Neues Risiko</msg>
+  <msg key="No_project_budget_specified">Bitte Projekt Budget eingeben</msg>
+  <msg key="Please_set_the_project_budget">Bitte Projekt Budget eingeben</msg>
+  <msg key="Probability">Wahrscheinlichkeit</msg>
+  <msg key="Project">Projektname</msg>
+  <msg key="Project_Risks">Projekt Risiken</msg>
+  <msg key="Status">Risikostatus</msg>
+  <msg key="Type">Risikotyp</msg>
+  <msg key="Without_budget_no_chart">Ohne Budgeteingabe kann kein Risiko kalkuliert werden</msg>
+</message_catalog>
