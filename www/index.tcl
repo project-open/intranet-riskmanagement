@@ -163,7 +163,7 @@ append left_navbar_html "
 set bind_vars [ns_set create]
 ns_set put $bind_vars project_id $risk_project_id
 
-set parent_menu_id [util_memoize [list db_string parent_menu "select menu_id from im_menus where label='project'" -default 0]]
+set parent_menu_id [im_menu_id_from_label "project"]
 set plugin_id ""
 
 set menu_label "project_summary"
