@@ -10,13 +10,11 @@
 # risk_ids
 
 if {![info exists view_name] || "" == $view_name} { set view_name "im_risk_list_short" }
-set view_id [util_memoize [list db_string get_view_id "select view_id from im_views where view_name = '$view_name'" -default 0]]
 
+set view_id [im_view_id_from_name $view_name]
 set bgcolor(0) " class=roweven "
 set bgcolor(1) " class=rowodd "
-
 set cell_width 15
-
 set return_url [im_url_with_query]
 
 # ---------------------------------------------------------
