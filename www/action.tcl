@@ -24,7 +24,7 @@ ad_page_contract {
 }
 
 set user_id [ad_maybe_redirect_for_registration]
-set user_name [im_name_from_user_id [ad_get_user_id]]
+set user_name [im_name_from_user_id [ad_conn user_id]]
 
 if {"" != $action_id} { set action [im_category_from_id -translate_p 0 $action_id] }
 set action_forbidden_msg [lang::message::lookup "" intranet-riskmanagement.Action_Forbidden "<b>Unable to execute action</b>:<br>You don't have the permissions to execute the action '%action%'."]
