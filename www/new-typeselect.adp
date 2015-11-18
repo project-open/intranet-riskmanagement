@@ -5,7 +5,7 @@
 <%= [im_box_header $page_title] %>
 
 <form action='@return_url;noquote@' method=POST>
-<%= [export_form_vars return_url risk_id risk_nr risk_name] %>
+<%= [export_vars -form {return_url risk_id risk_nr risk_name}] %>
 
 <table cellspacing=2 cellpadding=2>
 
@@ -19,7 +19,7 @@
 		</tr>
 </if>
 <else>
-	<%= [export_form_vars risk_type_id] %>
+	<%= [export_vars -form {risk_type_id] %>
 </else>
 
 <tr class=roweven>

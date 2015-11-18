@@ -75,7 +75,7 @@ if {[info exists risk_id] && ![empty_string_p $risk_id] && $risk_id > 0} {
 # Format Risk Data
 # ---------------------------------------------------------------
 
-set html_hidden_info [export_form_vars owner_id risk_id project_id return_url]
+set html_hidden_info [export_vars -form {owner_id risk_id project_id return_url}]
 
 set page_body "
 <form action=\"new-2.tcl\" method=GET>

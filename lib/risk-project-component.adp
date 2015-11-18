@@ -29,7 +29,7 @@
 <td colspan=2>
 	<div class="risk_table">
                 <form action="/intranet-riskmanagement/action" method=GET>
-                <%= [export_form_vars return_url] %>
+                <%= [export_vars -form {return_url}] %>
                 <table width="100%">
                 @table_header_html;noquote@
                 @table_body_html;noquote@

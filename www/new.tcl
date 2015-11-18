@@ -175,7 +175,7 @@ set risk_action_html ""
 if {[info exists risk_id]} {
     set risk_action_html "
 	<form action=/intranet-riskmanagement/action name=riskmanagement_action>
-	[export_form_vars return_url]
+	[export_vars -form {return_url}]
 	<!-- manual pass-through of risk_id as an array -->
 	<input type=hidden name=risk_id.$risk_id value='on'>
 	<input type=submit value='[lang::message::lookup "" intranet-riskmanagement.Action "Action"]'>
