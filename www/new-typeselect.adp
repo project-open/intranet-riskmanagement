@@ -19,7 +19,7 @@
 		</tr>
 </if>
 <else>
-	<%= [export_vars -form {risk_type_id] %>
+	<%= [export_vars -form {risk_type_id}] %>
 </else>
 
 <tr class=roweven>

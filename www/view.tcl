@@ -86,10 +86,10 @@ $html_hidden_info
     <TD class=rowtitle align=middle colSpan=2>Risk</TD></TR>
   <TR class=rowodd>
     <TD>User</TD>
-    <TD><a href=\"/intranet/users/view?[export_url_vars owner_id]\">$owner_name</a></TD></TR>
+    <TD><a href=\"/intranet/users/view?[export_vars -url {owner_id}]\">$owner_name</a></TD></TR>
   <TR class=roweven>
     <TD>Project</TD>
-    <TD><a href=\"/intranet/projects/view?[export_url_vars project_id]\">$project_name</a></TD></TR>
+    <TD><a href=\"/intranet/projects/view?[export_vars -url {project_id}]\">$project_name</a></TD></TR>
   <TR class=rowodd>
     <TD>Title</TD>
     <TD><input name=\"title\" type=\"text\" size=\"50\" value=$title></TD></TR>

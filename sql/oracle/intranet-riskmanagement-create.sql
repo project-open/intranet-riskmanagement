@@ -161,7 +161,7 @@ extra_select, extra_where, sort_order, visible_for) values (20104,210,NULL,'Impa
 
 insert into im_view_columns (column_id, view_id, group_id, column_name, column_render_tcl,
 extra_select, extra_where, sort_order, visible_for) values (20105,210,NULL,'Delete?',
-'"<a href=\"/intranet-riskmanagement/delete?[export_url_vars risk_id project_id]\">Del</a>"','','',6,'');
+'"<a href=\"/intranet-riskmanagement/delete?[export_vars -url {risk_id project_id}]\">Del</a>"','','',6,'');
 
 commit;
 
