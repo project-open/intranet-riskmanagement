@@ -18,7 +18,7 @@ ad_page_contract {
 # Security
 #
 set menu_label "reporting-project-risks"
-set current_user_id [ad_maybe_redirect_for_registration]
+set current_user_id [auth::require_login]
 set read_p [db_string report_perms "
 	select	im_object_permission_p(m.menu_id, :current_user_id, 'read')
 	from	im_menus m
@@ -28,7 +28,7 @@ set read_p [db_string report_perms "
 # For testing - set manually
 set read_p "t"
 
-if {![string equal "t" $read_p]} {
+if {"t" ne $read_p } {
     set message "You don't have the necessary permissions to view this page"
     ad_return_complaint 1 "<li>$message"
     ad_script_abort
@@ -327,7 +327,7 @@ im_report_render_row \
 set counter 0
 set class ""
 db_foreach sql $report_sql {
-	set class $rowclass([expr $counter % 2])
+	set class $rowclass([expr {$counter % 2}])
 
 	set risk_value_pretty [im_report_format_number $risk_value $output_format $number_locale]
 	set risk_impact_pretty [im_report_format_number $risk_impact $output_format $number_locale]

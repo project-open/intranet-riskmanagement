@@ -25,7 +25,7 @@ ad_page_contract {
     { return_url "" }
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 set page_title "View Risk"
 set context_bar [im_context_bar $page_title]
 
@@ -42,7 +42,7 @@ if {![im_permission $user_id "view_risks"]} {
 # Get Risk Data
 # ---------------------------------------------------------------
 
-if {[info exists risk_id] && ![empty_string_p $risk_id] && $risk_id > 0} {
+if {[info exists risk_id] && $risk_id ne "" && $risk_id > 0} {
     if { ![db_0or1row risk_data "select r.*, im_name_from_user_id(owner_id) as owner_name from im_risks r where r.risk_id = :risk_id" ] } {
 	ad_return_complaint "Bad Risk" "<li>We couldn't find the risk \#$risk_id; Hmm... there must be something wrong with our page!"
 	return
@@ -52,7 +52,7 @@ if {[info exists risk_id] && ![empty_string_p $risk_id] && $risk_id > 0} {
     set page_title "Edit Risk"
     set context_bar [im_context_bar $page_title]
 
-} elseif { [info exists curr_project_id] && ![empty_string_p $curr_project_id] && $curr_project_id > 0 } {
+} elseif { [info exists curr_project_id] && $curr_project_id ne "" && $curr_project_id > 0 } {
     # create a new risk
     set owner_id $user_id
     set project_id $curr_project_id
@@ -86,10 +86,10 @@ $html_hidden_info
     <TD class=rowtitle align=middle colSpan=2>Risk</TD></TR>
   <TR class=rowodd>
     <TD>User</TD>
-    <TD><a href=\"/intranet/users/view?[export_vars -url {owner_id}]\">$owner_name</a></TD></TR>
+    <TD><a href=\"/intranet/users/[export_vars -base view {owner_id}]\">$owner_name</a></TD></TR>
   <TR class=roweven>
     <TD>Project</TD>
-    <TD><a href=\"/intranet/projects/view?[export_vars -url {project_id}]\">$project_name</a></TD></TR>
+    <TD><a href=\"/intranet/projects/[export_vars -base view {project_id}]\">$project_name</a></TD></TR>
   <TR class=rowodd>
     <TD>Title</TD>
     <TD><input name=\"title\" type=\"text\" size=\"50\" value=$title></TD></TR>

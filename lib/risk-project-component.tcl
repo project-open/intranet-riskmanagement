@@ -36,7 +36,7 @@ set probab_classifier_values $probab_classifier
 set impact_classifier_values {}
 foreach i $impact_classifier { 
     catch {
-	lappend impact_classifier_values [expr 1.0 * $project_budget * $i / 100.0] 
+	lappend impact_classifier_values [expr {1.0 * $project_budget * $i / 100.0}] 
     }
 }
 
@@ -55,7 +55,7 @@ ad_proc im_risk_chart_classify {
     set result ""
     for {set i 0} {$i <= [llength $classifier]} {incr i} {
 	set low [lindex $classifier $i]
-	set high [lindex $classifier [expr $i+1]]
+	set high [lindex $classifier $i+1]
 	if {$value >= $low && $value <= $high} { 
 	    set result $i
 	    break
@@ -64,7 +64,7 @@ ad_proc im_risk_chart_classify {
     
     if {"" == $result} {
 	if {$value >= $high} { 
-	    set result [expr [llength $classifier]-2]
+	    set result [expr {[llength $classifier]-2}]
 	}
     }
 
@@ -78,7 +78,7 @@ ad_proc im_risk_chart_bg_color {
 } {
     Returns a suitable background color for x/y coordinates
 } {
-    set sum [expr $x + $y]
+    set sum [expr {$x + $y}]
     switch $sum {
 	0 { return "#00FF00" }
 	1 { return "#80FF80" }
@@ -165,7 +165,7 @@ array set chart_ids_hash {}
 db_foreach risks $risk_sql {
 
     # Format columns for the list view
-    set row_html "<tr$bgcolor([expr $ctr % 2])>\n"
+    set row_html "<tr$bgcolor([expr {$ctr % 2}])>\n"
     foreach column_var $column_vars {
         append row_html "\t<td valign=top><nobr>"
         set cmd "append row_html $column_var"
@@ -186,7 +186,7 @@ db_foreach risks $risk_sql {
     # Chart Hash - Number of risks in the cell
     set v 0
     if {[info exists chart_hash($key)]} { set v $chart_hash($key) }
-    set v [expr $v + 1]
+    set v [expr {$v + 1}]
     set chart_hash($key) $v
 
     # Chart risk_ids Hash - The IDs of the risks in the cell
@@ -200,18 +200,18 @@ db_foreach risks $risk_sql {
 
 # Format the risk summary chart
 set risk_chart_header "<td width=20></td>"
-for {set x 0} {$x < [expr [llength $probab_classifier]-1]} {incr x} {
-    set val [lindex $probab_classifier [expr $x+1]]
+for {set x 0} {$x < [expr {[llength $probab_classifier]-1}]} {incr x} {
+    set val [lindex $probab_classifier $x+1]
     append risk_chart_header "<td width=20 align=center>$val</td>\n"
 }
 set risk_chart_header "<tr>$risk_chart_header</tr>\n"
 
 set risk_chart_html "<table id=risk_chart border=1 align=right style='border-collapse:separate'>\n"
-for {set y [expr [llength $impact_classifier]-2]} {$y >= 0} {incr y -1} {
+for {set y [expr {[llength $impact_classifier]-2}]} {$y >= 0} {incr y -1} {
     set risk_chart_line ""
-    set val [lindex $impact_classifier [expr $y+1]]
+    set val [lindex $impact_classifier $y+1]
     append risk_chart_line "<tr>\n<td align=right width=$cell_width>$val</td>\n"
-    for {set x 0} {$x < [expr [llength $probab_classifier]-1]} {incr x} {
+    for {set x 0} {$x < [expr {[llength $probab_classifier]-1}]} {incr x} {
 	set key "$y-$x"
 	set v ""
 	if {[info exists chart_hash($key)]} { set v $chart_hash($key) }

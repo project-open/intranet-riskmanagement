@@ -22,7 +22,7 @@ ad_page_contract {
     {absence_id:integer 0}
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 
 
 set page_body [im_risk_project_component $user_id 3088]

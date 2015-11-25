@@ -30,14 +30,14 @@ ad_page_contract {
     { project_id "" }
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 
 if {![im_permission $user_id "add_risks"]} {
     ad_return_complaint "Insufficient Privileges" "
     <li>You don't have sufficient privileges to add/modify risks."
 }
 
-if { ![info exists state] || $state == "" } {
+if { ![info exists state] || $state eq "" } {
     set state "pending"
 }
 
@@ -51,13 +51,13 @@ switch $state {
     }
     "approved" {
 	if {$risk_id > 0} {
-	    if [catch {
+	    if {[catch {
 		db_dml delete_risk "DELETE from im_risks where risk_id = :risk_id"
-	    } errmsg ] {
+	    } errmsg ]} {
 		ad_return_complaint "Argument Error" "<ul>$errmsg</ul>"
 	    }
 	}
-	if { [info exists return_url] && ![empty_string_p $return_url] } {
+	if { [info exists return_url] && $return_url ne "" } {
 	    ad_returnredirect "$return_url"
 	} else {
 	    ad_returnredirect "/intranet/projects/view?project_id=$project_id"

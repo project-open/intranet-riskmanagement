@@ -23,7 +23,7 @@ ad_page_contract {
     {absence_id:integer 0}
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 
 set x_axis [list 0 1000 100 "kg"]
 set y_axis [list 0 10000 1000 "Euro"]

@@ -24,7 +24,7 @@ ad_page_contract {
 
 
 set return_url [im_url_with_query]
-set current_user_id [ad_maybe_redirect_for_registration]
+set current_user_id [auth::require_login]
 set page_title [lang::message::lookup "" intranet-riskmanagement.Risks "Risks"]
 set context_bar [im_context_bar $page_title]
 set main_navbar_label "projects"

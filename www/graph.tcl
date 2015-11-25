@@ -23,14 +23,14 @@ ad_page_contract {
     project_id:integer
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 
 if {![im_permission $user_id "view_risks"]} {
     ad_return_complaint "Insufficient Privileges" "
     <li>You don't have sufficient privileges to see risks."
 }
 
-if {[info exists project_id] && ![empty_string_p $project_id] && $project_id > 0} {
+if {[info exists project_id] && $project_id ne "" && $project_id > 0} {
     set sql "select r.*, n.project_name from im_risks r, (select project_name from im_projects where project_id = :project_id) n where project_id = :project_id"
 
     set data [list]
@@ -50,7 +50,7 @@ if {[info exists project_id] && ![empty_string_p $project_id] && $project_id > 0
     if { [llength $data] < 1 } {
         set page_body "<br><b>This project doesn't seem to have any risks.</b>\n"
     } else {
-	set x_axis [list 0 [expr $max_impact * 1.1] [im_get_axis $max_impact 10] "&euro;"]
+	set x_axis [list 0 [expr {$max_impact * 1.1}] [im_get_axis $max_impact 10] "&euro;"]
 	set y_axis [list 0 101 10 "%"]
 	set page_body [im_get_chart $x_axis $y_axis $data $settings]
     }

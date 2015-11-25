@@ -21,7 +21,7 @@ ad_page_contract {
 # No permissions necessary, that's handled by the object's new page
 # Here we just select an object_type_id for the given object.
 
-set current_user_id [ad_maybe_redirect_for_registration]
+set current_user_id [auth::require_login]
 set page_title [lang::message::lookup "" intranet-riskmanagement.Please_Select_a_Risk_Type "Please Select a Risk Type"]
 set context_bar [im_context_bar $page_title]
 

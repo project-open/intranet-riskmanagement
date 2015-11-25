@@ -23,7 +23,7 @@ ad_page_contract {
     return_url
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 set user_name [im_name_from_user_id [ad_conn user_id]]
 
 if {"" != $action_id} { set action [im_category_from_id -translate_p 0 $action_id] }

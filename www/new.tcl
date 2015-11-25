@@ -74,7 +74,7 @@ if {![info exists task]} {
 # Default & Security
 # ------------------------------------------------------------------
 
-set current_user_id [ad_maybe_redirect_for_registration]
+set current_user_id [auth::require_login]
 set user_id $current_user_id
 set current_url [im_url_with_query]
 set action_url "/intranet-riskmanagement/new"
@@ -95,7 +95,7 @@ set edit_risk_status_p 1
 # Page Title
 
 set page_title [lang::message::lookup "" intranet-riskmanagement.New_Risk "New Risk"]
-if {[exists_and_not_null risk_id]} {
+if {([info exists risk_id] && $risk_id ne "")} {
     set page_title [db_string title "select project_name from im_projects where project_id = :risk_id" -default ""]
 }
 if {"" == $page_title && 0 != $risk_type_id} { 
@@ -113,7 +113,7 @@ set context [list $page_title]
 # We need the risk_type_id for page title, dynfields etc.
 # Check if we can deduce the risk_type_id from risk_id
 if {0 == $risk_type_id || "" == $risk_type_id} {
-    if {[exists_and_not_null risk_id]} { 
+    if {([info exists risk_id] && $risk_id ne "")} { 
 	set risk_type_id [db_string ttype_id "select risk_type_id from im_risks where risk_id = :risk_id" -default 0]
     }
 }
@@ -129,7 +129,7 @@ if {![info exists form_mode]} { set form_mode "display" }
 if {"edit" == $form_mode} { set show_components_p 0 }
 
 set risk_exists_p 0
-if {[exists_and_not_null risk_id]} {
+if {([info exists risk_id] && $risk_id ne "")} {
     # Check if the risk exists
     set risk_exists_p [db_string risk_exists_p "select count(*) from im_risks where risk_id = :risk_id"]
 

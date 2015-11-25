@@ -40,7 +40,7 @@ ad_page_contract {
   return_url
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 
 if {![im_permission $user_id "add_risks"]} {
     ad_return_complaint "Insufficient Privileges" "
@@ -67,7 +67,7 @@ if { $exception_count > 0 } {
 
 if {$risk_id > 0} {
 
-    if [catch {
+    if {[catch {
 	db_dml update_risk "UPDATE
         im_risks SET
         owner_id = :owner_id,
@@ -77,7 +77,7 @@ if {$risk_id > 0} {
         title = :title,
         description = :description WHERE
         risk_id = :risk_id"
-    } errmsg ] {
+    } errmsg ]} {
 	ad_return_complaint "Argument Error" "<ul>$errmsg</ul>"
 	return
 
@@ -94,7 +94,7 @@ if {$risk_id > 0} {
 
 db_release_unused_handles
 
-if { [info exists return_url] && ![empty_string_p $return_url] } {
+if { [info exists return_url] && $return_url ne "" } {
     ad_returnredirect "$return_url"
 } else {
     ad_returnredirect "/intranet/projects/view?project_id=$project_id"

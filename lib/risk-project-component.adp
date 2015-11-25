@@ -2,13 +2,13 @@
 
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>
-<td valign=top>
+<td valign="top">
 
 </td>
-<td valign=top>
+<td valign="top">
 
-	<table align=right border=0 cellpadding=0 cellspacing=0>
-	<tr valign=bottom>
+	<table align="right" border="0" cellpadding="0" cellspacing="0">
+	<tr valign="bottom">
 		<td>
 		<div style="float: left; position: relative; -moz-transform: rotate(270deg); -o-transform: rotate(270deg); -webkit-transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3);"><%= [lang::message::lookup "" intranet-riskmanagement.Impact Impact] %></div>
 		</td>
@@ -20,13 +20,13 @@
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td align=center><%= [lang::message::lookup "" intranet-riskmanagement.Probability Probability] %></td>
+		<td align="center"><%= [lang::message::lookup "" intranet-riskmanagement.Probability Probability] %></td>
 	</tr>
 	</table>
 </td>
 </tr>
 <tr>
-<td colspan=2>
+<td colspan="2">
 	<div class="risk_table">
                 <form action="/intranet-riskmanagement/action" method=GET>
                 <%= [export_vars -form {return_url}] %>
