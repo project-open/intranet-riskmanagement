@@ -64,7 +64,7 @@ if {[im_permission $current_user_id "view_risks_all"]} {
     ]
     ad_form -extend -name $form_id -form {
         {mine_p:text(select),optional {label "Mine/All"} {options $mine_p_options }}
-        {risk_status_id:text(im_category_tree),optional {label \#intranet-riskmanagement.Risk_Status\#} {value $risk_status_id} {custom {category_type "Intranet Risk Status" translate_p 1}} }
+        {risk_status_id:text(im_category_tree),optional {label #intranet-riskmanagement.Risk_Status#} {value $risk_status_id} {custom {category_type "Intranet Risk Status" translate_p 1}} }
     } 
 }
 
@@ -82,9 +82,9 @@ set user_options [im_profile::user_options -profile_ids $user_select_groups]
 set user_options [linsert $user_options 0 [list "All" ""]]
 
 ad_form -extend -name $form_id -form {
-    {risk_project_id:text(select),optional {label \#intranet-riskmanagement.Project\#} {options $project_options}}
-    {risk_type_id:text(im_category_tree),optional {label \#intranet-riskmanagement.Risk_Type\#} {value $risk_type_id} {custom {category_type "Intranet Risk Type" translate_p 1 include_empty_name "[_ intranet-core.All]"} } }
-    {risk_status_id:text(im_category_tree),optional {label \#intranet-riskmanagement.Risk_Status\#} {value $risk_status_id} {custom {category_type "Intranet Risk Status" translate_p 1 include_empty_name "[_ intranet-core.All]"} } }
+    {risk_project_id:text(select),optional {label #intranet-riskmanagement.Project#} {options $project_options}}
+    {risk_type_id:text(im_category_tree),optional {label #intranet-riskmanagement.Risk_Type#} {value $risk_type_id} {custom {category_type "Intranet Risk Type" translate_p 1 include_empty_name "[_ intranet-core.All]"} } }
+    {risk_status_id:text(im_category_tree),optional {label #intranet-riskmanagement.Risk_Status#} {value $risk_status_id} {custom {category_type "Intranet Risk Status" translate_p 1 include_empty_name "[_ intranet-core.All]"} } }
     {start_date:text(text) {label "[_ intranet-timesheet2.Start_Date]"} {value "$start_date"} {html {size 10}} {after_html {<input type="button" style="height:20px; width:20px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendar('start_date', 'y-m-d');" >}}}
     {end_date:text(text) {label "[_ intranet-timesheet2.End_Date]"} {value "$end_date"} {html {size 10}} {after_html {<input type="button" style="height:20px; width:20px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendar('end_date', 'y-m-d');" >}}}
 }
@@ -139,7 +139,7 @@ set filter_html $__adp_output
 set left_navbar_html "
 	<div class='filter-block'>
         	<div class='filter-title'>
-	           #intranet-riskmanagement.Filter_Risks#
+	           [_ intranet-riskmanagement.Filter_Risks]
         	</div>
             	$filter_html
       	</div>
@@ -149,7 +149,7 @@ set left_navbar_html "
 append left_navbar_html "
       	<div class='filter-block'>
         <div class='filter-title'>
-            #intranet-riskmanagement.Admin_Risks#
+            [_ intranet-riskmanagement.Admin_Risks]
         </div>
 	$admin_html
       	</div>
