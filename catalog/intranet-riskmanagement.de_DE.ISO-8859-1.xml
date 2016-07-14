@@ -14,8 +14,8 @@
   <msg key="Project">Projektname</msg>
   <msg key="Project_Risks">Projekt Risiken</msg>
   <msg key="Risk_Status">Risiko Status</msg>
-  <msg key="Risk_Type">Risiko Typ</msg>
+  <msg key="Risk_Type">Typ Risiko</msg>
   <msg key="Status">Risikostatus</msg>
-  <msg key="Type">Risikotyp</msg>
+  <msg key="Type">Typ</msg>
   <msg key="Without_budget_no_chart">Ohne Budgeteingabe kann kein Risiko kalkuliert werden</msg>
 </message_catalog>
