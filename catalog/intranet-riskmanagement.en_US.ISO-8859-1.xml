@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="intranet-riskmanagement" locale="en_US" charset="ISO-8859-1">
 
+  <msg key="Action">Action</msg>
   <msg key="Add_a_new_risk">Add a new Risk</msg>
   <msg key="Admin_Risks">Admin Risks</msg>
+  <msg key="Delete">Delete</msg>
   <msg key="Delete_Risks">Delete_Risks</msg>
+  <msg key="Deleted">Deleted</msg>
+  <msg key="External">External</msg>
   <msg key="Filter_Risks">Risk Filter</msg>
   <msg key="Impact">Impact</msg>
+  <msg key="Internal">Internal</msg>
+  <msg key="Issue">Issue</msg>
   <msg key="Name">Name</msg>
   <msg key="New_Risk">New Risk</msg>
   <msg key="No_project_budget_specified">No project budget specified</msg>
+  <msg key="Open">Open</msg>
   <msg key="Please_set_the_project_budget">Please set the project budget</msg>
   <msg key="Probability">Probability</msg>
   <msg key="Project">Project</msg>
   <msg key="Project_Risks">Project Risks</msg>
+  <msg key="Risk">Risk</msg>
+  <msg key="Risk_Details">Risk Details</msg>
   <msg key="Risk_Status">Risk Status</msg>
   <msg key="Risk_Type">Risk Type</msg>
-  <msg key="Status">Risikostatus</msg>
+  <msg key="Status">Risk Status</msg>
   <msg key="Type">Type</msg>
   <msg key="Without_budget_no_chart">Without budget no chart</msg>
 </message_catalog>
