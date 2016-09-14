@@ -167,10 +167,10 @@ db_foreach risks $risk_sql {
     # Format columns for the list view
     set row_html "<tr$bgcolor([expr {$ctr % 2}])>\n"
     foreach column_var $column_vars {
-        append row_html "\t<td valign=top><nobr>"
+        append row_html "\t<td valign=top>"
         set cmd "append row_html $column_var"
         eval "$cmd"
-        append row_html "</nobr></td>\n"
+        append row_html "</td>\n"
     }
     append row_html "</tr>\n"
     append table_body_html $row_html
