@@ -109,6 +109,23 @@ create index im_risks_project_idx on im_risks(risk_project_id);
 create unique index im_risks_project_un on im_risks(risk_project_id, risk_name);
 
 
+-----------------------------------------------------------
+-- Create views for shortcut
+--
+-- These views are optional.
+
+create or replace view im_risk_status as
+select	category_id as risk_status_id, category as risk_status
+from	im_categories
+where	category_type = 'Intranet Risk Status'
+	and enabled_p = 't';
+
+create or replace view im_risk_types as
+select	category_id as risk_type_id, category as risk_type
+from	im_categories
+where	category_type = 'Intranet Risk Type'
+	and enabled_p = 't';
+
 
 -----------------------------------------------------------
 -- Standard Dynfields for Risks
@@ -278,25 +295,6 @@ SELECT im_category_new (75102, 'Issue', 'Intranet Risk Type');
 
 -- Action
 SELECT im_category_new (75210, 'Delete', 'Intranet Risk Action');
-
-
------------------------------------------------------------
--- Create views for shortcut
---
--- These views are optional.
-
-create or replace view im_risk_status as
-select	category_id as risk_status_id, category as risk_status
-from	im_categories
-where	category_type = 'Intranet Risk Status'
-	and enabled_p = 't';
-
-create or replace view im_risk_types as
-select	category_id as risk_type_id, category as risk_type
-from	im_categories
-where	category_type = 'Intranet Risk Type'
-	and enabled_p = 't';
-
 
 
 -----------------------------------------------------------
