@@ -24,6 +24,7 @@
   <msg key="Risk_Details">Risiko Details</msg>
   <msg key="Risk_Status">Risiko Status</msg>
   <msg key="Risk_Type">Typ Risiko</msg>
+  <msg key="Risks">Risiken</msg>
   <msg key="Status">Risikostatus</msg>
   <msg key="Type">Typ</msg>
   <msg key="Without_budget_no_chart">Ohne Budgeteingabe kann kein Risiko kalkuliert werden</msg>
