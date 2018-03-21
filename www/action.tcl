@@ -41,7 +41,7 @@ switch [string tolower $action] {
 	    }
 	    set value [string tolower $risk_id($rid)]
 	    if {"on" == $value} {
-		db_string del "select im_risk__delete(:rid) from dual"
+		im_risk::delete -risk_id $rid
 	    }
 	}
     }

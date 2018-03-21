@@ -138,7 +138,12 @@ set table_header_html "<tr class=rowtitle>$table_header_html</tr>\n"
 
 set criteria {}
 if {[info exists project_id] && "" != $project_id && 0 != $project_id} { lappend criteria "r.risk_project_id = :project_id" }
-if {[info exists risk_status_id] && "" != $risk_status_id && 0 != $risk_status_id} { lappend criteria "r.risk_status_id = :risk_status_id" }
+if {[info exists risk_status_id] && "" != $risk_status_id && 0 != $risk_status_id} { 
+    lappend criteria "r.risk_status_id in ([join [im_sub_categories $risk_status_id] ","])" 
+} else {
+    lappend criteria "r.risk_status_id not in ([join [im_sub_categories [im_risk_status_deleted]] ","])" 
+}
+
 if {[info exists risk_type_id] && "" != $risk_type_id && 0 != $risk_type_id} { lappend criteria "r.risk_type_id = :risk_type_id" }
 if {[info exists start_date] && "" != $start_date && 0 != $start_date} { lappend criteria "o.creation_date >= :start_date" }
 if {[info exists end_date] && "" != $end_date && 0 != $end_date} { lappend criteria "o.creation_date <= :end_date" }
@@ -256,6 +261,10 @@ set import_html "<li><a href=[export_vars -base "/intranet-csv-import/index" {{o
 if {!$import_exists_p} { set import_html "" }
 
 
+set all_risks_html "<li><a href=[export_vars -base "/intranet-riskmanagement/index" {{risk_project_id $project_id}}]>[lang::message::lookup "" intranet-riskmanagement.See_all_risks "See all risks"]</a>"
+
+
+
 # ---------------------------------------------------------
 # Table footer
 # with action box
@@ -273,6 +282,7 @@ set table_footer_html "
 <input type=submit>
 <ul>
 <li><a href='$new_risk_url'>$new_risk_msg</a>
+$all_risks_html
 $menu_html
 $import_html
 </ul>

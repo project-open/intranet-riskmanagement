@@ -43,3 +43,26 @@ ad_proc -public im_risk_project_component {
     set result [ad_parse_template -params $params "/packages/intranet-riskmanagement/lib/risk-project-component"]
     return [string trim $result]
 }
+
+
+namespace eval im_risk {
+    
+    ad_proc -public audit {
+	{-action "after_update" }
+	-risk_id:required
+    } {
+	Write the audit trail
+    } {
+	im_audit -object_id $risk_id -action $action
+    }
+
+    ad_proc -public delete {
+	-risk_id:required
+    } {
+	Set to status deleted
+    } {
+	db_dml del_risk "update im_risks set risk_status_id = [im_risk_status_deleted] where risk_id = :risk_id"
+	im_risk::audit -risk_id $risk_id
+    }
+
+}
