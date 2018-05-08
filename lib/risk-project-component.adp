@@ -1,10 +1,10 @@
 <div class="risk_outer">
 
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
-<tr>
-<td valign="top">
 
-</td>
+<if @risk_chart_html@ ne "">
+<tr>
+<td valign="top"></td>
 <td valign="top">
 
 	<table align="right" border="0" cellpadding="0" cellspacing="0">
@@ -25,6 +25,8 @@
 	</table>
 </td>
 </tr>
+</if>
+
 <tr>
 <td colspan="2">
 	<div class="risk_table">

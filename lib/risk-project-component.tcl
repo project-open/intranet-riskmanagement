@@ -8,6 +8,9 @@
 # start_date
 # end_date
 # risk_ids
+# extra_sql_list
+
+# ad_return_complaint 1 $extra_sql_list
 
 if {![info exists view_name] || "" == $view_name} { set view_name "im_risk_list_short" }
 
@@ -132,6 +135,24 @@ set table_header_html "<tr class=rowtitle>$table_header_html</tr>\n"
 
 
 # ---------------------------------------------------------
+# Write local variables into form_vars
+# ---------------------------------------------------------
+
+set form_vars [ns_set create]
+foreach varname [info locals] {
+
+    # Don't consider variables that start with a "_", that
+    # contain a ":" or that are array variables:
+    if {"_" == [string range $varname 0 0]} { continue }
+    if {[regexp {:} $varname]} { continue }
+    if {[array exists $varname]} { continue }
+
+    # Get the value of the variable and add to the form_vars set
+    set value [expr "\$$varname"]
+    ns_set put $form_vars $varname $value
+}
+
+# ---------------------------------------------------------
 # List the risks
 # and format the risk chart
 # ---------------------------------------------------------
@@ -148,6 +169,31 @@ if {[info exists risk_type_id] && "" != $risk_type_id && 0 != $risk_type_id} { l
 if {[info exists start_date] && "" != $start_date && 0 != $start_date} { lappend criteria "o.creation_date >= :start_date" }
 if {[info exists end_date] && "" != $end_date && 0 != $end_date} { lappend criteria "o.creation_date <= :end_date" }
 if {[info exists risk_ids] && "" != $risk_ids && 0 != $risk_ids} { lappend criteria "r.risk_id in ([join $risk_ids ","])" }
+
+
+
+# Deal with DynField Vars and add constraint to SQL
+# Add the DynField variables to $form_vars
+set dynfield_extra_where ""
+if {[info exists extra_sql_list]} {
+    array set extra_sql_array $extra_sql_list
+    set dynfield_extra_where $extra_sql_array(where)
+    set ns_set_vars $extra_sql_array(bind_vars)
+    set tmp_vars [util_list_to_ns_set $ns_set_vars]
+    set tmp_var_size [ns_set size $tmp_vars]
+    for {set i 0} {$i < $tmp_var_size} { incr i } {
+	set key [ns_set key $tmp_vars $i]
+	set value [ns_set get $tmp_vars $key]
+	ns_set put $form_vars $key $value
+    }
+}
+
+if {"" != $dynfield_extra_where} {
+    lappend criteria "risk_id in $dynfield_extra_where"
+}
+
+
+
 set where_clause [join $criteria " and\n\t\t"]
 if {[llength $criteria] > 0} { set where_clause "and $where_clause" }
 
@@ -167,7 +213,7 @@ set table_body_html ""
 set risk_chart_html ""
 array set chart_hash {}
 array set chart_ids_hash {}
-db_foreach risks $risk_sql {
+db_foreach risks $risk_sql -bind $form_vars {
 
     # Format columns for the list view
     set row_html "<tr$bgcolor([expr {$ctr % 2}])>\n"
@@ -241,10 +287,10 @@ if {"" == $project_budget || 0 == $project_budget} {
     "
 }
 
-if {"" == $project_id} {
+
+if {"" eq $project_id} {
     set risk_chart_html ""
 }
-
 
 
 # ---------------------------------------------------------

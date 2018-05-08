@@ -89,11 +89,22 @@ ad_form -extend -name $form_id -form {
     {end_date:text(text) {label "[_ intranet-timesheet2.End_Date]"} {value "$end_date"} {html {size 10}} {after_html {<input type="button" style="height:20px; width:20px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendar('end_date', 'y-m-d');" >}}}
 }
 
+
 im_dynfield::append_attributes_to_form \
     -object_type $object_type \
     -form_id $form_id \
     -object_id 0 \
-    -advanced_filter_p 1
+    -advanced_filter_p 1 \
+    -search_p 1 \
+    -page_url "/intranet-helpdesk/index"
+
+im_dynfield::append_attributes_to_form \
+    -object_type $object_type \
+    -form_id $form_id \
+    -object_id 0 \
+    -advanced_filter_p 1 \
+    -search_p 1 \
+    -page_url "/intranet-riskmanagement/index"
     
 # Set the form values from the HTTP form variable frame
 im_dynfield::set_form_values_from_http -form_id $form_id
@@ -113,7 +124,8 @@ set params [list \
 		[list start_date $start_date] \
 		[list end_date $end_date] \
 		[list risk_ids $risk_ids] \
-	       ]
+		[list extra_sql_list [array get extra_sql_array]] \
+]
 
 set risk_html [ad_parse_template -params $params "/packages/intranet-riskmanagement/lib/risk-project-component"]
 

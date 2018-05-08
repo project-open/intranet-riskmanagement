@@ -222,7 +222,7 @@ foreach var_from_url $vars_from_url {
 
 
 set risk_elements [list]
-set project_options [im_project_options -include_empty 0]
+set project_options [im_project_options -include_empty 0 -exclude_status_id [im_project_status_closed]]
 lappend risk_elements {risk_project_id:text(select) {label "[lang::message::lookup {} intranet-riskmanagement.Project Project]"} {options $project_options}}
 
 lappend risk_elements {risk_type_id:text(im_category_tree) {label "[lang::message::lookup {} intranet-riskmanagement.Type Type]"} {custom {category_type "Intranet Risk Type" translate_p 1 include_empty_p 0 package_key "intranet-riskmanagement"}}}
