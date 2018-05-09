@@ -45,6 +45,33 @@ ad_proc -public im_risk_project_component {
 }
 
 
+
+# -----------------------------------------------------------
+# Permissions
+# -----------------------------------------------------------
+
+ad_proc -public im_risk_permissions {user_id risk_id view_var read_var write_var admin_var} {
+    Fill the "by-reference" variables read, write and admin
+    with the permissions of $user_id on $risk_id.<br>
+} {
+    upvar $view_var view
+    upvar $read_var read
+    upvar $write_var write
+    upvar $admin_var admin
+
+    # set user_is_admin_p [im_is_user_site_wide_or_intranet_admin $user_id]
+    set risk_project_id [util_memoize [list db_string risk_project "select risk_project_id from im_risks where risk_id = $risk_id" -default ""]]
+
+    # Just use project permissions...
+    im_project_permissions $user_id $risk_project_id view read write admin
+}
+
+
+
+# -----------------------------------------------------------
+# 
+# -----------------------------------------------------------
+
 namespace eval im_risk {
     
     ad_proc -public audit {
