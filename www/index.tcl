@@ -178,8 +178,7 @@ ns_set put $bind_vars project_id $risk_project_id
 set parent_menu_id [im_menu_id_from_label "project"]
 set plugin_id ""
 
-set menu_label "project_summary"
-set menu_label "project_summary"
+set menu_label ""
 set show_context_help_p 1
 
 set sub_navbar [im_sub_navbar \
