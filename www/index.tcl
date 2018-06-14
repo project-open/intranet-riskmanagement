@@ -136,7 +136,8 @@ set risk_html [ad_parse_template -params $params "/packages/intranet-riskmanagem
 set admin_html "<ul>"
 
 if {$object_write} {
-    append admin_html "<li><a href=\"/intranet-riskmanagement/new\">[_ intranet-riskmanagement.Add_a_new_risk]</a>\n"
+    set url [export_vars -base "/intranet-riskmanagement/new" {return_url]]
+    append admin_html "<li><a href=\"$url">[_ intranet-riskmanagement.Add_a_new_risk]</a>\n"
 }
 
 # ---------------------------------------------------------------
