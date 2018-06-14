@@ -219,10 +219,18 @@ set url_vars_set [ns_conn form]
 foreach var_from_url $vars_from_url {
     ad_set_element_value -element $var_from_url [im_opt_val $var_from_url]
 }
-
-
 set risk_elements [list]
-set project_options [im_project_options -include_empty 0 -exclude_status_id [im_project_status_closed]]
+
+# Exclude from the options closed and potential projects, and "fake" projects (opportunities and programs).
+set please_select_l10n [lang::message::lookup "" intranet-riskmanagement.Please_select_project "-- Please select a project --"]
+set project_options [im_project_options \
+			 -include_empty 1 -include_empty_name $please_select_l10n \
+			 -exclude_status_id [im_project_status_closed] \
+			 -exclude_type_id [list [im_project_type_ticket] [im_project_type_opportunity] [im_project_type_program]] \
+			 -exclude_status_id [list [im_project_status_closed] [im_project_status_potential]] \
+			 -project_id $risk_project_id \
+]
+
 lappend risk_elements {risk_project_id:text(select) {label "[lang::message::lookup {} intranet-riskmanagement.Project Project]"} {options $project_options}}
 
 lappend risk_elements {risk_type_id:text(im_category_tree) {label "[lang::message::lookup {} intranet-riskmanagement.Type Type]"} {custom {category_type "Intranet Risk Type" translate_p 1 include_empty_p 0 package_key "intranet-riskmanagement"}}}
@@ -355,10 +363,6 @@ ad_form -extend -name riskmanagement_risk -on_request {
     {risk_name
         {![db_string risk_count "select count(*) from im_risks where risk_name = :risk_name and risk_project_id = :risk_project_id and risk_id != :risk_id"]}
         "[lang::message::lookup {} intranet-risks.Risk_name_already_exists_for_this_project {Risk 'name' already exists for this project}]"
-    }
-    {risk_probability_percent
-	{$risk_probability_percent > 0.0}
-	"[lang::message::lookup {} intranet-riskmanagement.Probability_above_zero {Probability need to be above zero.}]"
     }
     {risk_probability_percent
 	{$risk_probability_percent > 0.0}
