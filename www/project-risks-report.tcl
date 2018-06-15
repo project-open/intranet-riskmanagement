@@ -97,7 +97,7 @@ set levels [list \
 
 # Get dynamic risk fields
 #
-set deref_list [im_dynfield::object_attributes_derefs -object_type "im_risk" -prefix "r."]
+set deref_list [im_dynfield::object_attributes_derefs -object_type "im_risk"]
 set deref_extra_select [join $deref_list ",\n\t"]
 if {"" != $deref_extra_select} { set deref_extra_select ",\n\t$deref_extra_select" }
 
@@ -121,9 +121,11 @@ set report_sql "
 		p.project_name
 		$deref_extra_select
 	from
+		acs_objects o,
 		im_risks r,
 		im_projects p
 	where
+		r.risk_id = o.object_id and
 		r.risk_project_id = p.project_id and
 		p.parent_id is null
 		$project_sql
