@@ -198,7 +198,8 @@ set where_clause [join $criteria " and\n\t\t"]
 if {[llength $criteria] > 0} { set where_clause "and $where_clause" }
 
 set risk_sql "
-	select	r.*,
+	select	o.*,
+		r.*,
 		im_category_from_id(r.risk_type_id) as risk_type,
 		im_category_from_id(r.risk_status_id) as risk_status
 	from	im_risks r,
