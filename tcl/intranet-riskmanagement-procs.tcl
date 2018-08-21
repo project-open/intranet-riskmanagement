@@ -59,6 +59,11 @@ ad_proc -public im_risk_permissions {user_id risk_id view_var read_var write_var
     upvar $write_var write
     upvar $admin_var admin
 
+    set perm_proc [parameter::get_from_package_key -package_key "intranet-riskmanagement" -parameter "RiskPermissionFunction" -default ""]
+    if {"" ne $perm_proc} {
+	return [$perm_proc $user_id risk_id view read write admin]
+    }
+
     # set user_is_admin_p [im_is_user_site_wide_or_intranet_admin $user_id]
     set risk_project_id [util_memoize [list db_string risk_project "select risk_project_id from im_risks where risk_id = $risk_id" -default ""]]
 

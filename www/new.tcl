@@ -83,12 +83,21 @@ set focus "risk.var_name"
 if {"" == $return_url} { set return_url [im_url_with_query] }
 
 if {[info exists risk_id] && "" == $risk_id} { unset risk_id }
-
-set view_risks_all_p [im_permission $current_user_id "view_risks_all"]
 set copy_from_risk_name ""
 
 # No support for workflow at the moment
 set edit_risk_status_p 1
+
+
+# Permissions
+if {[info exists risk_id]} {
+    im_risk_permissions $user_id $risk_id view_p read_p write_p admin_p
+    if {!$read_p} { ad_return_complaint 1 "You don't have permissions to see this risk #$risk_id" }
+} else {
+    im_project_permissions $user_id $risk_project_id view_p read_p write_p admin_p
+    if {!$write_p} { ad_return_complaint 1 "You don't have permissions to add a new risk to project #$risk_project_id" }
+}
+
 
 
 # ----------------------------------------------
@@ -137,7 +146,6 @@ if {([info exists risk_id] && $risk_id ne "")} {
     im_audit -object_id $risk_id -action before_update
 
 }
-
 
 # ---------------------------------------------
 # The base form. Define this early so we can extract the form status
