@@ -42,6 +42,7 @@ update acs_object_types set type_category_type = 'Intranet Risk Type' where obje
 -- acs_objects...) that contain information about an im_risk object.
 insert into acs_object_type_tables (object_type,table_name,id_column)
 values ('im_risk', 'im_risks', 'risk_id');
+
 insert into acs_object_type_tables (object_type,table_name,id_column)
 values ('im_risk', 'acs_objects', 'object_id');
 
