@@ -27,7 +27,7 @@ set return_url [im_url_with_query]
 set current_user_id [auth::require_login]
 set page_title [lang::message::lookup "" intranet-riskmanagement.Risks "Risks"]
 set context_bar [im_context_bar $page_title]
-set main_navbar_label ""
+set main_navbar_label "reporting"
 set master_p 1
 set show_context_help_p 0
 set new_risk_url [export_vars -base "/intranet-riskmanagement/new" {risk_project_id return_url}]
