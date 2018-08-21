@@ -33,8 +33,7 @@ switch [string tolower $action] {
     delete {
 	# Delete
 	foreach rid [array names risk_id] {
-	    set risk_project_id [db_string pid "select risk_project_id from im_risks where risk_id = :rid" -default ""]
-	    im_project_permissions $user_id $risk_project_id view read write admin
+	    im_risk_permissions $user_id $risk_project_id view read write admin
 	    if {!$write} {
 		ad_return_complaint 1 $action_forbidden_msg
 		ad_script_abort
