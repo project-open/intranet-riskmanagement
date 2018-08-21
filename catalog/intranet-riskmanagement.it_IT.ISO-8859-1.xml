@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="intranet-riskmanagement" locale="it_IT" charset="ISO-8859-1">
+
+  <msg key="Add_a_new_risk">Aggiungi nuovo Rischio o Issue</msg>
+  <msg key="Delete_Risks">Elimina Rischio</msg>
+  <msg key="Impact">Impatto</msg>
+  <msg key="New_Risk">Nuovo Rischio o Issue</msg>
+  <msg key="No_project_budget_specified">Nessun budget di progetto specificato</msg>
+  <msg key="Please_set_the_project_budget">Inserisci il budget di progetto</msg>
+  <msg key="Probability">Probabilità</msg>
+  <msg key="Project">Progetto</msg>
+  <msg key="Project_Risks">Project Risk &amp; Issue</msg>
+  <msg key="Risk_Status">Status</msg>
+  <msg key="Risk_Type">Type</msg>
+  <msg key="Without_budget_no_chart">il diagramma non può essere visualizzato</msg>
+</message_catalog>
