@@ -100,6 +100,7 @@ if {[info exists risk_id]} {
 
 
 
+
 # ----------------------------------------------
 # Page Title
 
@@ -154,12 +155,11 @@ if {([info exists risk_id] && $risk_id ne "")} {
 set title_label [lang::message::lookup {} intranet-riskmanagement.Name {Title}]
 set title_help [lang::message::lookup {} intranet-riskmanagement.Title_Help {Please enter a descriptive name for the new risk.}]
 
-set edit_p [im_permission $current_user_id add_risks_for_customers]
-set delete_p $edit_p
-set edit_p 1
-
 set actions {}
-if {$edit_p} { lappend actions {"Edit" edit} }
+if {$write_p} { lappend actions {"Edit" edit} }
+
+
+#set delete_p $admin_p
 # if {$delete_p} { lappend actions {"Delete" delete} }
 
 ad_form \
