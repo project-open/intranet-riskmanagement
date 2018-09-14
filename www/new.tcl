@@ -91,9 +91,11 @@ set edit_risk_status_p 1
 
 # Permissions
 if {[info exists risk_id]} {
+    set risk_name [db_string risk_name "select risk_name from im_risks where risk_id = :risk_id" -default ""]
     im_risk_permissions $user_id $risk_id view_p read_p write_p admin_p
     if {!$read_p} { ad_return_complaint 1 "You don't have permissions to see this risk #$risk_id" }
 } else {
+    set risk_name ""
     im_project_permissions $user_id $risk_project_id view_p read_p write_p admin_p
     if {!$write_p} { ad_return_complaint 1 "You don't have permissions to add a new risk to project #$risk_project_id" }
 }
@@ -330,6 +332,8 @@ ad_form -extend -name riskmanagement_risk -on_request {
     ad_script_abort
 
 } -edit_data {
+    
+    if {!$write_p} { ad_return_complaint 1 "You are trying to modify an object without permissions"; ad_script_abort }
 
     if {![info exists risk_probability_percent] || ![info exists risk_impact]} {
 	ad_return_complaint 1 $conf_error_message
