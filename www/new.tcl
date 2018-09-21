@@ -50,6 +50,7 @@ if {![info exists task]} {
     set show_components_p 0
     set enable_master_p 0
     set risk_type_id ""
+    set risk_name ""
 
     set plugin_id ""
     set view_name "standard"
@@ -82,53 +83,49 @@ set action_url "/intranet-riskmanagement/new"
 set focus "risk.var_name"
 if {"" == $return_url} { set return_url [im_url_with_query] }
 
+# Unset risk_id if it is empty - that's for ad_form
 if {[info exists risk_id] && "" == $risk_id} { unset risk_id }
-set copy_from_risk_name ""
 
+    # Check if the risk exists
+set risk_exists_p 0
+if {([info exists risk_id])} {
+    set risk_exists_p [db_string risk_exists_p "select count(*) from im_risks where risk_id = :risk_id"]
+}
+
+
+set copy_from_risk_name ""
 # No support for workflow at the moment
 set edit_risk_status_p 1
 
 
 # Permissions
-if {[info exists risk_id]} {
-    set risk_name [db_string risk_name "select risk_name from im_risks where risk_id = :risk_id" -default ""]
+if {$risk_exists_p} {
+    db_1row risk_info "select risk_name, risk_type_id from im_risks where risk_id = :risk_id"
     im_risk_permissions $user_id $risk_id view_p read_p write_p admin_p
     if {!$read_p} { ad_return_complaint 1 "You don't have permissions to see this risk #$risk_id" }
 } else {
-    set risk_name ""
     im_project_permissions $user_id $risk_project_id view_p read_p write_p admin_p
     if {!$write_p} { ad_return_complaint 1 "You don't have permissions to add a new risk to project #$risk_project_id" }
 }
 
-
+# Now the variables risk_name and risk_type_id should exist and have the right values
 
 
 # ----------------------------------------------
 # Page Title
 
 set page_title [lang::message::lookup "" intranet-riskmanagement.New_Risk "New Risk"]
-if {([info exists risk_id] && $risk_id ne "")} {
-    set page_title [db_string title "select project_name from im_projects where project_id = :risk_id" -default ""]
-}
-if {"" == $page_title && 0 != $risk_type_id} { 
+if {0 != $risk_type_id} {
     set risk_type [im_category_from_id $risk_type_id]
-    set page_title [lang::message::lookup "" intranet-riskmanagement.New_RiskType "New %risk_type%"]
+    append page_title $risk_type
 } 
+if {$risk_exists_p} {
+    set page_title "[lang::message::lookup "" intranet-core.Edit "Edit"] $risk_name"
+}
 
 set context [list $page_title]
 
 
-
-# ----------------------------------------------
-# Determine risk type
-
-# We need the risk_type_id for page title, dynfields etc.
-# Check if we can deduce the risk_type_id from risk_id
-if {0 == $risk_type_id || "" == $risk_type_id} {
-    if {([info exists risk_id] && $risk_id ne "")} { 
-	set risk_type_id [db_string ttype_id "select risk_type_id from im_risks where risk_id = :risk_id" -default 0]
-    }
-}
 
 # ----------------------------------------------
 # Calculate form_mode
@@ -140,15 +137,6 @@ if {![info exists form_mode]} { set form_mode "display" }
 # Show the ADP component plugins?
 if {"edit" == $form_mode} { set show_components_p 0 }
 
-set risk_exists_p 0
-if {([info exists risk_id] && $risk_id ne "")} {
-    # Check if the risk exists
-    set risk_exists_p [db_string risk_exists_p "select count(*) from im_risks where risk_id = :risk_id"]
-
-    # Write Audit Trail
-    im_audit -object_id $risk_id -action before_update
-
-}
 
 # ---------------------------------------------
 # The base form. Define this early so we can extract the form status
@@ -333,6 +321,9 @@ ad_form -extend -name riskmanagement_risk -on_request {
 
 } -edit_data {
     
+    # Write Audit Trail
+    im_audit -object_id $risk_id -object_type "im_risk" -status_id $risk_status_id -type_id $risk_type_id -action before_update
+
     if {!$write_p} { ad_return_complaint 1 "You are trying to modify an object without permissions"; ad_script_abort }
 
     if {![info exists risk_probability_percent] || ![info exists risk_impact]} {
