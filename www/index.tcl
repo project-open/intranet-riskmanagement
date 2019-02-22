@@ -20,8 +20,8 @@ ad_page_contract {
     { risk_ids "" }
     { start_date "" }
     { end_date "" }
+    { view_name "im_risk_list_long" }
 }
-
 
 set return_url [im_url_with_query]
 set current_user_id [auth::require_login]
@@ -123,6 +123,7 @@ set params [list \
 		[list risk_type_id $risk_type_id] \
 		[list start_date $start_date] \
 		[list end_date $end_date] \
+		[list view_name $view_name] \
 		[list risk_ids $risk_ids] \
 		[list extra_sql_list [array get extra_sql_array]] \
 ]

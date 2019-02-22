@@ -34,12 +34,25 @@ ad_proc -public im_risk_action_delete {} { return 75210 }
 # ---------------------------------------------------------------------
 
 ad_proc -public im_risk_project_component {
-    -project_id
+    {-risk_status_id ""}
+    {-risk_type_id ""}
+    {-start_date ""}
+    {-end_date ""}
+    {-view_name "im_risk_list_short"}
+    {-risk_ids "" }
+    -project_id:required
 } {
     Returns a HTML component to show all project related risks
 } {
-    set params [list [list project_id $project_id]]
-#    set project_type_id [db_string ptype "select project_type_id from im_projects where project_id = :project_id" -default ""]
+    set params [list \
+		    [list project_id $project_id] \
+		    [list risk_status_id $risk_status_id] \
+		    [list risk_type_id $risk_type_id] \
+		    [list start_date $start_date] \
+		    [list end_date $end_date] \
+		    [list view_name $view_name] \
+		    [list risk_ids $risk_ids] \
+    ]
     set result [ad_parse_template -params $params "/packages/intranet-riskmanagement/lib/risk-project-component"]
     return [string trim $result]
 }

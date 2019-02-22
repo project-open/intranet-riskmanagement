@@ -93,6 +93,7 @@ if {([info exists risk_id])} {
 }
 
 
+
 set copy_from_risk_name ""
 # No support for workflow at the moment
 set edit_risk_status_p 1
@@ -100,7 +101,7 @@ set edit_risk_status_p 1
 
 # Permissions
 if {$risk_exists_p} {
-    db_1row risk_info "select risk_name, risk_type_id from im_risks where risk_id = :risk_id"
+    db_1row risk_info "select risk_name, risk_project_id, risk_type_id from im_risks where risk_id = :risk_id"
     im_risk_permissions $user_id $risk_id view_p read_p write_p admin_p
     if {!$read_p} { ad_return_complaint 1 "You don't have permissions to see this risk #$risk_id" }
 } else {

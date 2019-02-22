@@ -9,6 +9,7 @@
 # end_date
 # risk_ids
 # extra_sql_list
+# view_name
 
 # ad_return_complaint 1 $extra_sql_list
 
@@ -158,7 +159,18 @@ foreach varname [info locals] {
 # ---------------------------------------------------------
 
 set criteria {}
-if {[info exists project_id] && "" != $project_id && 0 != $project_id} { lappend criteria "r.risk_project_id = :project_id" }
+if {[info exists project_id] && "" != $project_id && 0 != $project_id} { 
+    lappend criteria "r.risk_project_id = :project_id" 
+} else {
+    lappend criteria "r.risk_project_id in (
+	select	project_id
+	from	im_projects
+	where	parent_id is null and 
+		project_status_id not in ([join [im_sub_categories [im_project_status_closed]] ","])
+    )"
+}
+
+
 if {[info exists risk_status_id] && "" != $risk_status_id && 0 != $risk_status_id} { 
     lappend criteria "r.risk_status_id in ([join [im_sub_categories $risk_status_id] ","])" 
 } else {
@@ -201,12 +213,17 @@ set risk_sql "
 	select	o.*,
 		r.*,
 		im_category_from_id(r.risk_type_id) as risk_type,
-		im_category_from_id(r.risk_status_id) as risk_status
-	from	im_risks r,
-		acs_objects o
+		im_category_from_id(r.risk_status_id) as risk_status,
+		p.project_name as risk_project_name,
+		im_name_from_user_id(o.creation_user) as creation_user_name
+	from	acs_objects o,
+		im_risks r
+		LEFT OUTER JOIN im_projects p ON (r.risk_project_id = p.project_id)
 	where	r.risk_id = o.object_id 
 		$where_clause
-	order by risk_probability_percent * risk_impact DESC;
+	order by
+		p.project_name,
+		risk_probability_percent * risk_impact DESC;
 "
 
 set ctr 0
