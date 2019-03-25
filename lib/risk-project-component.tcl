@@ -25,25 +25,10 @@ set return_url [im_url_with_query]
 # Define constants for classifying risks
 # ---------------------------------------------------------
 
-set project_budget [db_string budget "
-	select	project_budget
-	from	im_projects
-	where	project_id = :project_id
-" -default 0]
-
 # Classifiers for impact and probability.
 # Each classified starts with 0 and ends at "ininite"
 set impact_classifier [list 0 5 10 20 30 100]
 set probab_classifier [list 0 5 10 20 30 100]
-
-set probab_classifier_values $probab_classifier
-set impact_classifier_values {}
-foreach i $impact_classifier { 
-    catch {
-	lappend impact_classifier_values [expr {1.0 * $project_budget * $i / 100.0}] 
-    }
-}
-
 
 
 ad_proc im_risk_chart_classify {
@@ -160,7 +145,11 @@ foreach varname [info locals] {
 
 set criteria {}
 if {[info exists project_id] && "" != $project_id && 0 != $project_id} { 
-    lappend criteria "r.risk_project_id = :project_id" 
+    lappend criteria "
+	(r.risk_project_id = :project_id OR
+	r.risk_project_id in (select pp.project_id from im_projects pp where pp.program_id = :project_id)
+	)
+    " 
 } else {
     lappend criteria "r.risk_project_id in (
 	select	project_id
@@ -212,9 +201,11 @@ if {[llength $criteria] > 0} { set where_clause "and $where_clause" }
 set risk_sql "
 	select	o.*,
 		r.*,
+		round( least(100.0 * r.risk_impact / greatest(coalesce(p.project_budget,0.0), 0.01), 100)) as risk_impact_percent,
 		im_category_from_id(r.risk_type_id) as risk_type,
 		im_category_from_id(r.risk_status_id) as risk_status,
 		p.project_name as risk_project_name,
+		coalesce(p.project_budget, 0.0) as project_budget,
 		im_name_from_user_id(o.creation_user) as creation_user_name
 	from	acs_objects o,
 		im_risks r
@@ -245,8 +236,8 @@ db_foreach risks $risk_sql -bind $form_vars {
     append table_body_html $row_html
 
     # Classify risks for the 3x3 risk overview
-    set impact_class [im_risk_chart_classify -value $risk_impact -classifier $impact_classifier_values]
-    set probab_class [im_risk_chart_classify -value $risk_probability_percent -classifier $probab_classifier_values]
+    set impact_class [im_risk_chart_classify -value $risk_impact_percent -classifier $impact_classifier]
+    set probab_class [im_risk_chart_classify -value $risk_probability_percent -classifier $probab_classifier]
     if {"" == $impact_class || "" == $probab_class} {
 	ad_return_complaint 1 "impact=$impact_class, prob=$probab_class"
     }
