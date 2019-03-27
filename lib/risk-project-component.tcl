@@ -217,6 +217,7 @@ set risk_sql "
 		risk_probability_percent * risk_impact DESC;
 "
 
+set project_budget ""
 set ctr 0
 set table_body_html ""
 set risk_chart_html ""
