@@ -5,8 +5,6 @@
 <property name="focus">@focus;literal@</property>
 <property name="sub_navbar">@sub_navbar;literal@</property>
 
-<SCRIPT Language=JavaScript src=/resources/diagram/diagram/diagram.js></SCRIPT>
-
 <if @message@ not nil>
     <div class="general-message">@message@</div>
 </if>
