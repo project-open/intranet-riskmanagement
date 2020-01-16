@@ -29,6 +29,13 @@ set user_name [im_name_from_user_id [ad_conn user_id]]
 if {"" != $action_id} { set action [im_category_from_id -translate_p 0 $action_id] }
 set action_forbidden_msg [lang::message::lookup "" intranet-riskmanagement.Action_Forbidden "<b>Unable to execute action</b>:<br>You don't have the permissions to execute the action '%action%'."]
 
+
+foreach rid [array names risk_id] {
+    # Write Audit Trail before update, just in case
+    im_audit -object_id $rid -action before_update
+}
+
+
 switch [string tolower $action] {
     delete {
 	# Delete
