@@ -8,11 +8,18 @@
 ad_page_contract {
     Lists risks per project, taking into account DynFields.
 } {
+    { report_department_id "" }
+    { report_project_id "" }
     { project_id "" }
+    { report_risk_type_id "" }
+    { report_risk_status_id "" }
     { level_of_detail:integer 3 }
     { output_format "html" }
     { number_locale "" }
 }
+
+# Compatibility
+if {"" eq $report_project_id && "" ne $project_id} { set report_project_id $project_id }
 
 # ------------------------------------------------------------
 # Security
@@ -103,12 +110,25 @@ if {"" != $deref_extra_select} { set deref_extra_select ",\n\t$deref_extra_selec
 
 
 set project_sql ""
-if {"" != $project_id && 0 != $project_id} {
-    set project_sql "and p.project_id = :project_id\n"
+if {"" != $report_project_id && 0 != $report_project_id} {
+    set project_sql "and p.project_id = :report_project_id\n"
 } else {
     # No specific project set - show all open projects
     set project_sql "and p.project_status_id in (select * from im_sub_categories([im_project_status_open]))"
 }
+
+if {"" ne $report_risk_status_id && 0 ne $report_risk_status_id} {
+    append project_sql "\n\t\tand r.risk_status_id in ([join [im_sub_categories $report_risk_status_id] ", "])"
+}
+
+if {"" ne $report_risk_type_id && 0 ne $report_risk_type_id} {
+    append project_sql "\n\t\tand r.risk_type_id in ([join [im_sub_categories $report_risk_type_id] ", "])"
+}
+
+if {"" ne $report_department_id && 0 ne $report_department_id} {
+    append project_sql "and p.project_cost_center_id in ([join [im_sub_cost_center_ids $report_department_id] ", "])\n"
+}
+
 
 set report_sql "
 	select
@@ -148,7 +168,6 @@ set header0 {
 	"Impact"
 	"Type"
 	"Status"
-	"Description"
 }
 
 # Main content line
@@ -160,7 +179,6 @@ set risk_header_vars {
 	$risk_impact_pretty
 	$risk_type
 	$risk_status
-	$risk_description
 }
 
 
@@ -193,7 +211,7 @@ db_foreach dynfield_attributes $dynfield_sql {
 
 
 set project_header {
-	"\#colspan=10 <a href=$this_url&project_id=$project_id&level_of_detail=3
+	"\#colspan=10 <a href=$this_url&report_project_id=$project_id&level_of_detail=3
 	target=_blank><img src=/intranet/images/plus_9.gif width=9 height=9 border=0></a> 
 	<b><a href=$project_url$project_id>$project_name</a></b>"
 }
@@ -278,10 +296,27 @@ switch $output_format {
 		    [im_select -translate_p 0 level_of_detail $levels $level_of_detail]
 		  </td>
 		</tr>
+
+		<tr>
+		  <td>[lang::message::lookup "" intranet-riskmanagement.Project_Department "Project Department"]:</td>
+		  <td>[im_cost_center_select -include_empty 1 -include_empty_name "All" report_department_id $report_department_id]</td>
+		</tr>
+
 		<tr>
 		  <td>[lang::message::lookup "" intranet-core.Project Project]:</td>
-		  <td>[im_project_select -include_empty_p 1 project_id $project_id]</td>
+		  <td>[im_project_select -include_empty_p 1 report_project_id $report_project_id]</td>
 		</tr>
+
+		<tr>
+		  <td>[lang::message::lookup "" intranet-riskmanagement.Risk_Type "Risk Type"]:</td>
+		  <td>[im_category_select -include_empty_p 1 "Intranet Risk Type" report_risk_type_id $report_risk_type_id]</td>
+		</tr>
+
+		<tr>
+		  <td>[lang::message::lookup "" intranet-riskmanagement.Risk_Status "Risk Status"]:</td>
+		  <td>[im_category_select -include_empty_p 1 "Intranet Risk Status" report_risk_status_id $report_risk_status_id]</td>
+		</tr>
+
 		<tr>
 		  <td class=form-label>[lang::message::lookup "" intranet-reporting.Output_Format Format]</td>
 		  <td class=form-widget>
