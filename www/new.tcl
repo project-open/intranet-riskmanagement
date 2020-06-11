@@ -216,7 +216,7 @@ if {"delete" == $button_pressed} {
 # Fetch variable values from the HTTP session and write to local variables
 set url_vars_set [ns_conn form]
 foreach var_from_url $vars_from_url {
-    ad_set_element_value -element $var_from_url [im_opt_val $var_from_url]
+    ad_set_element_value -element $var_from_url [im_opt_val -limit_to nohtml $var_from_url]
 }
 set risk_elements [list]
 
@@ -241,9 +241,9 @@ ad_form -extend -name riskmanagement_risk -form $risk_elements
 
 # Add DynFields to the form
 set field_cnt [im_dynfield::append_attributes_to_form \
-		   -object_id [im_opt_val risk_id] \
+		   -object_id [im_opt_val -limit_to integer risk_id] \
 		   -form_display_mode $form_mode \
-		   -object_subtype_id [im_opt_val risk_type_id] \
+		   -object_subtype_id [im_opt_val -limit_to integer risk_type_id] \
 		   -object_type "im_risk" \
 		   -form_id "riskmanagement_risk" \
 ]
