@@ -1,5 +1,12 @@
 <div class="risk_outer">
 
+<script type="text/javascript" <if @::__csp_nonce@ not nil>nonce="@::__csp_nonce;literal@"</if>>
+window.addEventListener('load', function() { 
+     document.getElementById('list_check_all').addEventListener('click', function() { acs_ListCheckAll('risk', this.checked) });
+});
+</script>
+
+
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 
 <if @risk_chart_html@ ne "">

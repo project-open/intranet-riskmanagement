@@ -354,7 +354,7 @@ insert into im_view_columns (
         visible_for
 ) values (
         21000, 210, 0,
-        '<input type=checkbox name=_dummy onclick="acs_ListCheckAll(''risk'',this.checked)">',
+        '<input id=list_check_all type=checkbox name=_dummy>',
         '"<input type=checkbox name=risk_id.$risk_id id=risk.$risk_id>"',
         ''
 );

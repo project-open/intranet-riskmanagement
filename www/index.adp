@@ -7,8 +7,13 @@
 <property name="show_context_help">@show_context_help_p;literal@</property>
 
 
-<if @master_p@>
-</if>
+<!-- Show calendar on start- and end-date -->
+<script type="text/javascript" <if @::__csp_nonce@ not nil>nonce="@::__csp_nonce;literal@"</if>>
+window.addEventListener('load', function() { 
+     document.getElementById('start_date_calendar').addEventListener('click', function() { showCalendar('start_date', 'y-m-d'); });
+     document.getElementById('end_date_calendar').addEventListener('click', function() { showCalendar('end_date', 'y-m-d'); });
+});
+</script>
 
 <%= [im_box_header $page_title] %>
 @risk_html;noquote@
