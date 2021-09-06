@@ -354,7 +354,7 @@ insert into im_view_columns (
         visible_for
 ) values (
         21000, 210, 0,
-        '<input id=list_check_all type=checkbox name=_dummy>',
+        '<input id=list_check_all_risks type=checkbox name=_dummy>',
         '"<input type=checkbox name=risk_id.$risk_id id=risk.$risk_id>"',
         ''
 );
